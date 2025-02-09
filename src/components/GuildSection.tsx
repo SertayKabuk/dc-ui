@@ -105,7 +105,7 @@ export function GuildSection({ guild }: { guild: DiscordGuild }) {
           
           <div className="space-y-6">
             {groupedChannels[DiscordChannelType.GuildCategory]?.map(category => {
-              const children = (category as any).children || [];
+              const children = (category as DiscordChannel & { children: DiscordChannel[] }).children || [];
               return (
                 <ChannelTypeSection 
                   key={category.id}

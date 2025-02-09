@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 
 interface GuildHeaderProps {
   guildIcon: string | null;
@@ -10,10 +11,12 @@ export function GuildHeader({ guildIcon, guildName, description }: GuildHeaderPr
   return (
     <div className="flex-1">
       <div className="flex items-center">
-        <img 
+        <Image 
           src={guildIcon ? guildIcon : "https://cdn.discordapp.com/embed/avatars/0.png"}
           alt={guildName}
-          className="w-8 h-8 rounded-full mr-3"
+          width={32}
+          height={32}
+          className="rounded-full mr-3"
           onError={(e) => {
             e.currentTarget.src = "https://cdn.discordapp.com/embed/avatars/0.png";
           }}

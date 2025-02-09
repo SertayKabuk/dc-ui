@@ -1,7 +1,7 @@
 'use client';
 
 import { DiscordChannel, DiscordChannelType } from "@/types/discord";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { ChevronRight } from "lucide-react";
 import { Channel } from "./Channel";
 
