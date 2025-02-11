@@ -58,6 +58,7 @@ export interface DiscordUser {
   username: string;
   displayName: string;
   status: string;
+  activity: string;
 }
 
 export interface DiscordChannel {

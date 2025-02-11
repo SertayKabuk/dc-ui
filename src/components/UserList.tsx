@@ -15,15 +15,22 @@ export function UserList({ users }: UserListProps) {
   const offlineUsers = users.filter(user => user.status === 'offline');
 
   const renderUser = (user: DiscordUser) => (
-    <div key={user.id} className="flex items-center py-1 text-sm text-gray-600 dark:text-gray-400">
-      <span className="w-2 h-2 rounded-full mr-2" style={{ 
-        backgroundColor: user.status === 'online' || user.status === 'connected' ? '#22c55e' : 
-                       user.status === 'idle' ? '#eab308' : 
-                       user.status === 'dnd' ? '#ef4444' : '#6b7280'
-      }}/>
-      <span>{user.username}</span>
-      {user.displayName && user.displayName !== user.username && (
-        <span className="text-gray-400 dark:text-gray-500 ml-1">({user.displayName})</span>
+    <div key={user.id} className="flex flex-col py-1">
+      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+        <span className="w-2 h-2 rounded-full mr-2" style={{ 
+          backgroundColor: user.status === 'online' || user.status === 'connected' ? '#22c55e' : 
+                         user.status === 'idle' ? '#eab308' : 
+                         user.status === 'dnd' ? '#ef4444' : '#6b7280'
+        }}/>
+        <span>{user.username}</span>
+        {user.displayName && user.displayName !== user.username && (
+          <span className="text-gray-400 dark:text-gray-500 ml-1">({user.displayName})</span>
+        )}
+      </div>
+      {user.activity && (
+        <div className="ml-4 text-xs text-gray-500 dark:text-gray-500">
+          {user.activity}
+        </div>
       )}
     </div>
   );
