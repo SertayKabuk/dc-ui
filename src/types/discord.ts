@@ -115,6 +115,7 @@ export function normalizeChannelType(type: string | number): DiscordChannelType 
     case 'ANNOUNCEMENTTHREAD':
     case 'NEWSTHREAD':
       return DiscordChannelType.AnnouncementThread;
+    case 'GUILDPUBLICTHREAD':
     case 'PUBLICTHREAD':
       return DiscordChannelType.PublicThread;
     case 'PRIVATETHREAD':
