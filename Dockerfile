@@ -12,6 +12,7 @@ COPY . .
 
 # Generate Prisma client and build the application
 RUN npx prisma generate
+RUN npm run prebuild
 RUN npm run build
 
 # Production stage
