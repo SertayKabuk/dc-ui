@@ -6,6 +6,7 @@ import { ChannelFilters } from "./ChannelFilters";
 import { GuildHeader } from "./GuildHeader";
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 const channelTypeIcons: Record<DiscordChannelType, string> = {
   [DiscordChannelType.GuildText]: "💭",
@@ -70,7 +71,11 @@ function groupChannelsByType(channels: DiscordChannel[]): Record<DiscordChannelT
   return grouped;
 }
 
-export function GuildSection({ guild }: { guild: DiscordGuild }) {
+interface GuildSectionProps {
+  guild: DiscordGuild;
+}
+
+export function GuildSection({ guild }: GuildSectionProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hideEmpty, setHideEmpty] = useState(false);
   const [voiceOnly, setVoiceOnly] = useState(false);
@@ -87,7 +92,7 @@ export function GuildSection({ guild }: { guild: DiscordGuild }) {
         />
         <div className="flex-1">
           <GuildHeader 
-            guildIcon={guild.iconURL} 
+            guildIcon={guild.iconURL}
             guildName={guild.name}
             description={guild.description}
           />
@@ -96,6 +101,19 @@ export function GuildSection({ guild }: { guild: DiscordGuild }) {
       
       <div className={`transition-all duration-200 ${isCollapsed ? 'hidden' : 'block'}`}>
         <div className="px-6 pb-6">
+          <div className="flex justify-between items-center">
+            <GuildHeader 
+              guildIcon={guild.iconURL}
+              guildName={guild.name}
+              description={guild.description}
+            />
+            <Link 
+              href={`/discord/${guild.id}/presence`}
+              className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+            >
+              View Presence Logs →
+            </Link>
+          </div>
           <ChannelFilters 
             hideEmpty={hideEmpty}
             voiceOnly={voiceOnly}

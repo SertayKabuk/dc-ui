@@ -81,6 +81,19 @@ export interface DiscordGuildsResponse {
   guilds: DiscordGuild[];
 }
 
+export interface PresenceLog {
+  id: string;
+  guild_id: string;
+  user_id: string;
+  username: string;
+  old_status: string;
+  new_status: string;
+  old_activity: string | null;
+  new_activity: string | null;
+  client_status: string;
+  created_at: string;
+}
+
 export function normalizeChannelType(type: string | number): DiscordChannelType {
   // If type is a number, return it directly if it's a valid DiscordChannelType
   if (typeof type === 'number') {
