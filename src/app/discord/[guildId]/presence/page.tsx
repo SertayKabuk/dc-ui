@@ -43,7 +43,7 @@ export default async function PresencePage(props: {
                 id="startDate"
                 name="startDate"
                 required
-                defaultValue={new Date(startDate).toISOString().slice(0, 16)}
+                defaultValue={startDate.slice(0, 16)}
                 className="border rounded p-2 text-black bg-white dark:text-white dark:bg-gray-800"
               />
             </div>
@@ -54,7 +54,7 @@ export default async function PresencePage(props: {
                 id="endDate"
                 name="endDate"
                 required
-                defaultValue={new Date(endDate).toISOString().slice(0, 16)}
+                defaultValue={endDate.slice(0, 16)}
                 className="border rounded p-2 text-black bg-white dark:text-white dark:bg-gray-800"
               />
             </div>
