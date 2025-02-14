@@ -5,7 +5,7 @@ import { PresenceLog } from "@/types/discord";
 import { Suspense } from "react";
 
 type Params = Promise<{ guildId: string }>
-type SearchParams = Promise<{ startDate?: string, endDate?: string }>
+type SearchParams = Promise<{ startDate: string, endDate: string }>
  
 export default async function PresencePage(props: {
     params: Params
@@ -17,9 +17,9 @@ export default async function PresencePage(props: {
     return <p>You are not authorized to view this page!</p>;
   }
 
-  const params = await props.params
-  const searchParams = await props.searchParams
-  
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
   const startDate = searchParams.startDate || new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const endDate = searchParams.endDate || new Date().toISOString();
   
@@ -42,8 +42,9 @@ export default async function PresencePage(props: {
                 type="datetime-local" 
                 id="startDate"
                 name="startDate"
+                required
                 defaultValue={new Date(startDate).toISOString().slice(0, 16)}
-                className="border rounded p-2"
+                className="border rounded p-2 text-black bg-white dark:text-white dark:bg-gray-800"
               />
             </div>
             <div>
@@ -52,8 +53,9 @@ export default async function PresencePage(props: {
                 type="datetime-local" 
                 id="endDate"
                 name="endDate"
+                required
                 defaultValue={new Date(endDate).toISOString().slice(0, 16)}
-                className="border rounded p-2"
+                className="border rounded p-2 text-black bg-white dark:text-white dark:bg-gray-800"
               />
             </div>
             <button 

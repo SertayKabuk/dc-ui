@@ -102,11 +102,6 @@ export function GuildSection({ guild }: GuildSectionProps) {
       <div className={`transition-all duration-200 ${isCollapsed ? 'hidden' : 'block'}`}>
         <div className="px-6 pb-6">
           <div className="flex justify-between items-center">
-            <GuildHeader 
-              guildIcon={guild.iconURL}
-              guildName={guild.name}
-              description={guild.description}
-            />
             <Link 
               href={`/discord/${guild.id}/presence`}
               className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
