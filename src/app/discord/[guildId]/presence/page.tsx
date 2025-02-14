@@ -20,8 +20,8 @@ export default async function PresencePage(props: {
   const params = await props.params;
   const searchParams = await props.searchParams;
 
-  const startDate = searchParams.startDate || new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  const endDate = searchParams.endDate || new Date().toISOString();
+  const startDate = (searchParams.startDate ? searchParams.startDate.concat(":00.000Z") : null) || new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const endDate = (searchParams.endDate ? searchParams.startDate.concat(":00.000Z") : null) || new Date().toISOString();
 
   const presenceLogs = await fetchPresenceLogs(params.guildId, startDate, endDate);
 
