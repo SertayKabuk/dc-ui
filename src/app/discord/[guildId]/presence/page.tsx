@@ -6,10 +6,10 @@ import { Suspense } from "react";
 
 type Params = Promise<{ guildId: string }>
 type SearchParams = Promise<{ startDate: string, endDate: string }>
- 
+
 export default async function PresencePage(props: {
-    params: Params
-    searchParams: SearchParams
+  params: Params
+  searchParams: SearchParams
 }) {
   const session = await auth();
 
@@ -22,8 +22,8 @@ export default async function PresencePage(props: {
 
   const startDate = searchParams.startDate || new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const endDate = searchParams.endDate || new Date().toISOString();
-  
-  const result = await fetchPresenceLogs(params.guildId, startDate, endDate);
+
+  const presenceLogs = await fetchPresenceLogs(params.guildId, startDate, endDate);
 
   const formatDateTime = (dateStr: string) => {
     return new Date(dateStr).toLocaleString();
@@ -35,11 +35,11 @@ export default async function PresencePage(props: {
         <h1 className="text-2xl font-bold mb-6">Presence History</h1>
 
         <div className="mb-6">
-          <form className="flex gap-4">
+          <form className="flex gap-4" action="" method="get">
             <div>
               <label htmlFor="startDate" className="block text-sm mb-1">Start Date</label>
-              <input 
-                type="datetime-local" 
+              <input
+                type="datetime-local"
                 id="startDate"
                 name="startDate"
                 required
@@ -49,8 +49,8 @@ export default async function PresencePage(props: {
             </div>
             <div>
               <label htmlFor="endDate" className="block text-sm mb-1">End Date</label>
-              <input 
-                type="datetime-local" 
+              <input
+                type="datetime-local"
                 id="endDate"
                 name="endDate"
                 required
@@ -58,7 +58,7 @@ export default async function PresencePage(props: {
                 className="border rounded p-2 text-black bg-white dark:text-white dark:bg-gray-800"
               />
             </div>
-            <button 
+            <button
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 self-end"
             >
@@ -67,11 +67,11 @@ export default async function PresencePage(props: {
           </form>
         </div>
 
-        {result.error ? (
+        {presenceLogs.error ? (
           <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-700 dark:text-red-400">
-            <p>{result.error}</p>
+            <p>{presenceLogs.error}</p>
           </div>
-        ) : !result.data?.length ? (
+        ) : !presenceLogs.data?.length ? (
           <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 text-yellow-700 dark:text-yellow-400">
             <p>No presence logs found for this period.</p>
           </div>
@@ -88,7 +88,7 @@ export default async function PresencePage(props: {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {result.data.map((log: PresenceLog) => (
+                {presenceLogs.data.map((log: PresenceLog) => (
                   <tr key={log.id}>
                     <td className="px-4 py-2">{formatDateTime(log.created_at)}</td>
                     <td className="px-4 py-2">{log.username}</td>
