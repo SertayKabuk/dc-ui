@@ -4,13 +4,20 @@ import { fetchPresenceLogs } from "@/lib/discord";
 import { PresenceLog } from "@/types/discord";
 import { Suspense } from "react";
 
+interface PageProps {
+  params: {
+    guildId: string;
+  };
+  searchParams: {
+    startDate?: string;
+    endDate?: string;
+  };
+}
+
 export default async function PresencePage({
   params,
   searchParams,
-}: {
-  params: { guildId: string };
-  searchParams: { startDate?: string; endDate?: string };
-}) {
+}: PageProps) {
   const session = await auth();
 
   if (session?.user?.role !== "admin") {
