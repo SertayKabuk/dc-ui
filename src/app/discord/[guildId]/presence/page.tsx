@@ -4,26 +4,22 @@ import { fetchPresenceLogs } from "@/lib/discord";
 import { PresenceLog } from "@/types/discord";
 import { Suspense } from "react";
 
-interface PageProps {
-  params: {
-    guildId: string;
-  };
-  searchParams: {
-    startDate?: string;
-    endDate?: string;
-  };
-}
-
-export default async function PresencePage({
-  params,
-  searchParams,
-}: PageProps) {
+type Params = Promise<{ guildId: string }>
+type SearchParams = Promise<{ startDate?: string, endDate?: string }>
+ 
+export default async function PresencePage(props: {
+    params: Params
+    searchParams: SearchParams
+}) {
   const session = await auth();
 
   if (session?.user?.role !== "admin") {
     return <p>You are not authorized to view this page!</p>;
   }
 
+  const params = await props.params
+  const searchParams = await props.searchParams
+  
   const startDate = searchParams.startDate || new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const endDate = searchParams.endDate || new Date().toISOString();
   
