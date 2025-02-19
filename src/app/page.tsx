@@ -36,6 +36,25 @@ export default async function Home() {
             </div>
           </Link>
 
+          <Link href="/matches"
+                className="group p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
+                <svg className="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M21.433 4.86a1 1 0 0 0-1.466-.572l-6 3a1 1 0 0 0-.467.467l-3 6a1 1 0 0 0 0 .894l3 6a1 1 0 0 0 .467.467l6 3a1 1 0 0 0 1.466-.572l3-12a1 1 0 0 0 0-.684l-3-12zM19.65 16.76l-4.8-2.4 2.4-4.8 4.8 2.4-2.4 4.8z"/>
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold mb-1 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">
+                  PUBG Matches
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  View your PUBG match history
+                </p>
+              </div>
+            </div>
+          </Link>
+
           {/* Placeholder for future features */}
           <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center space-x-4">
