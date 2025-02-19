@@ -1,11 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { fetchMatchDetail } from '@/lib/pubg';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { PubgMatchResponse, Participant } from '@/types/pubg';
 
-export default function MatchDetail({ params }: { params: { matchId: string } }) {
+type Params = Promise<{ matchId: string }>
+
+export default function MatchDetail(props: { params: Params }) {
+
+    const params = use(props.params);
+
     const [matchData, setMatchData] = useState<PubgMatchResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -43,7 +48,7 @@ export default function MatchDetail({ params }: { params: { matchId: string } })
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-6">Match Details</h1>
-            
+
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                     <div>
