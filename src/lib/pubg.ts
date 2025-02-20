@@ -1,12 +1,18 @@
 import { PubgMatchResponse } from "@/types/pubg";
 
+export type FilteredFetchStatus = {
+    isLoading: boolean;
+    error: string | null;
+    data: PubgMatchResponse[] | null;
+};
+
 export type FetchStatus = {
     isLoading: boolean;
     error: string | null;
     data: PubgMatchResponse | null;
 };
 
-export async function fetchFilteredMatches(playerName: string, startDate: Date, endDate: Date): Promise<FetchStatus> {
+export async function fetchFilteredMatches(playerName: string, startDate: Date, endDate: Date): Promise<FilteredFetchStatus> {
     try {
         const apiKey = process.env.DISCORD_BOT_API_KEY;
         if (!apiKey) {
@@ -64,18 +70,17 @@ export async function fetchMatchDetail(matchId: string): Promise<FetchStatus> {
                 data: null
             };
         }
- 
-        const response = await fetch(
-            `${process.env.DISCORD_BOT_API_URL}/api/v1/pubg/match-detail/filter/matchId/${matchId}`,
-            {
-                headers: {
-                    'X-API-Key': apiKey
-                },
-                next: {
-                    revalidate: 60
-                }
+
+        const url = `${process.env.DISCORD_BOT_API_URL}/api/v1/pubg/match-detail/filter/matchId/${matchId}`;
+        
+        const response = await fetch(url, {
+            headers: {
+                'X-API-Key': apiKey
+            },
+            next: {
+                revalidate: 60
             }
-        );
+        });
 
         if (!response.ok) {
             throw new Error(`Failed to fetch match details: ${response.statusText}`);

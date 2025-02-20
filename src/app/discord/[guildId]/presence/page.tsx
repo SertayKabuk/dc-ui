@@ -20,8 +20,13 @@ export default async function PresencePage(props: {
   const params = await props.params;
   const searchParams = await props.searchParams;
 
-  const startDate = (searchParams.startDate ? searchParams.startDate.concat(":00.000Z") : null) || new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  const endDate = (searchParams.endDate ? searchParams.endDate.concat(":00.000Z") : null) || new Date().toISOString();
+  const startDate = searchParams.startDate ? 
+    new Date(searchParams.startDate) : 
+    new Date(Date.now() - 24 * 60 * 60 * 1000);
+    
+  const endDate = searchParams.endDate ? 
+    new Date(searchParams.endDate) : 
+    new Date();
 
   const presenceLogs = await fetchPresenceLogs(params.guildId, startDate, endDate);
 
@@ -43,7 +48,7 @@ export default async function PresencePage(props: {
                 id="startDate"
                 name="startDate"
                 required
-                defaultValue={startDate.slice(0, 16)}
+                defaultValue={startDate.toISOString().slice(0, 16)}
                 className="border rounded p-2 text-black bg-white dark:text-white dark:bg-gray-800"
               />
             </div>
@@ -54,7 +59,7 @@ export default async function PresencePage(props: {
                 id="endDate"
                 name="endDate"
                 required
-                defaultValue={endDate.slice(0, 16)}
+                defaultValue={endDate.toISOString().slice(0, 16)}
                 className="border rounded p-2 text-black bg-white dark:text-white dark:bg-gray-800"
               />
             </div>

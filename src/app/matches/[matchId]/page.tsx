@@ -1,10 +1,11 @@
 import { fetchMatchDetail } from '@/lib/pubg';
 import { Participant } from '@/types/pubg';
+import DateFilters from './DateFilters';
+import Link from 'next/link';
 
-type Params = Promise<{ matchId: string }>
+type Params = Promise<{ matchId: string }>;
 
 export default async function MatchDetail(props: { params: Params }) {
-
     const params = await props.params;
     const result = await fetchMatchDetail(params.matchId);
 
@@ -23,7 +24,20 @@ export default async function MatchDetail(props: { params: Params }) {
 
     return (
         <div className="container mx-auto p-4">
+            <div className="mb-6">
+                <Link href="/matches" className="text-blue-500 hover:text-blue-600 inline-flex items-center">
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Back to Search
+                </Link>
+            </div>
+
             <h1 className="text-2xl font-bold mb-6">Match Details</h1>
+
+            <div className="mb-6">
+                <DateFilters matchId={params.matchId} />
+            </div>
 
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">

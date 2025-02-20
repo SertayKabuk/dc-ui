@@ -32,7 +32,6 @@ export async function fetchDiscordGuilds(): Promise<FetchStatus> {
 
         const rawData = await response.json();
         
-        // Normalize channel types in the response
         const data: DiscordGuildsResponse = {
             guilds: rawData.guilds.map((guild: DiscordGuild) => ({
                 ...guild,
@@ -58,25 +57,28 @@ export async function fetchDiscordGuilds(): Promise<FetchStatus> {
     }
 }
 
-export async function fetchPresenceLogs(guildId: string, startDate: string, endDate: string): Promise<{ data?: PresenceLog[], error?: string }> {
-  try {
-    const response = await fetch(
-      `${process.env.DISCORD_BOT_API_URL}/api/v1/discord/presence-history/filter/guildId/${guildId}/startDate/${encodeURIComponent(startDate)}/endDate/${encodeURIComponent(endDate)}`,
-      {
-        headers: {
-          'X-API-Key': process.env.DISCORD_BOT_API_KEY || '',
-        },
-      }
-    );
+export async function fetchPresenceLogs(guildId: string, startDate: Date, endDate: Date): Promise<{ data?: PresenceLog[], error?: string }> {
+    try {
+        const startDateStr = startDate.toISOString();
+        const endDateStr = endDate.toISOString();
+        
+        const response = await fetch(
+            `${process.env.DISCORD_BOT_API_URL}/api/v1/discord/presence-history/filter/guildId/${guildId}/startDate/${encodeURIComponent(startDateStr)}/endDate/${encodeURIComponent(endDateStr)}`,
+            {
+                headers: {
+                    'X-API-Key': process.env.DISCORD_BOT_API_KEY || '',
+                },
+            }
+        );
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return { data };
+    } catch (error) {
+        console.error('Error fetching presence logs:', error);
+        return { error: 'Failed to fetch presence logs' };
     }
-
-    const data = await response.json();
-    return { data };
-  } catch (error) {
-    console.error('Error fetching presence logs:', error);
-    return { error: 'Failed to fetch presence logs' };
-  }
 }
