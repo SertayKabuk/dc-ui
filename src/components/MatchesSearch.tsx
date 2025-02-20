@@ -3,8 +3,15 @@
 import { searchMatches } from '@/app/actions/matches';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { PubgMatchResponse } from '@/types/pubg';
+import { PubgMatchResponse, Participant } from '@/types/pubg';
 import { useSearchParams } from 'next/navigation';
+
+function findPlayerStats(match: PubgMatchResponse, playerName: string) {
+    const participants = match.included.filter(item => item.type === 'participant') as Participant[];
+    return participants.find(p => 
+        p.attributes.stats.name?.toLowerCase() === playerName.toLowerCase()
+    )?.attributes.stats;
+}
 
 export default function MatchesSearch() {
     const searchParams = useSearchParams();
@@ -112,25 +119,50 @@ export default function MatchesSearch() {
                         <h2 className="text-xl font-semibold">Match Results</h2>
                     </div>
                     <div className="divide-y dark:divide-gray-700">
-                        {matches.map((match) => (
-                            <Link
-                                href={`/matches/${match.data.id}`}
-                                key={match.data.id}
-                                className="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                            >
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <div className="font-semibold">{match.data.attributes.gameMode}</div>
-                                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                                            {match.data.attributes.mapName}
+                        {matches.map((match) => {
+                            const playerStats = findPlayerStats(match, searchParams?.get('playerName') || '');
+                            return (
+                                <Link
+                                    href={`/matches/${match.data.id}`}
+                                    key={match.data.id}
+                                    className="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                >
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between items-center">
+                                            <div>
+                                                <div className="font-semibold">{match.data.attributes.gameMode}</div>
+                                                <div className="text-sm text-gray-600 dark:text-gray-400">
+                                                    {match.data.attributes.mapName}
+                                                </div>
+                                            </div>
+                                            <div className="text-right text-sm text-gray-600 dark:text-gray-400">
+                                                {new Date(match.data.attributes.createdAt).toLocaleString()}
+                                            </div>
                                         </div>
+                                        {playerStats && (
+                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 text-sm">
+                                                <div className="flex items-center space-x-2">
+                                                    <span className="text-gray-600 dark:text-gray-400">Kills:</span>
+                                                    <span className="font-medium">{playerStats.kills}</span>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                    <span className="text-gray-600 dark:text-gray-400">Damage:</span>
+                                                    <span className="font-medium">{Math.round(playerStats.damageDealt)}</span>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                    <span className="text-gray-600 dark:text-gray-400">Place:</span>
+                                                    <span className="font-medium">{playerStats.winPlace}</span>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                    <span className="text-gray-600 dark:text-gray-400">Survival Time:</span>
+                                                    <span className="font-medium">{Math.round(playerStats.timeSurvived / 60)}m</span>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className="text-right text-sm text-gray-600 dark:text-gray-400">
-                                        {new Date(match.data.attributes.createdAt).toLocaleString()}
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            );
+                        })}
                     </div>
                 </div>
             )}
