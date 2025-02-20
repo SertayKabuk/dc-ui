@@ -1,15 +1,27 @@
 'use client';
 
 import { searchMatches } from '@/app/actions/matches';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { PubgMatchResponse } from '@/types/pubg';
-
+import { useSearchParams } from 'next/navigation';
 
 export default function MatchesSearch() {
+    const searchParams = useSearchParams();
     const [matches, setMatches] = useState<PubgMatchResponse[]>([]);
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState(false);
+
+    // Initial search if URL params exist
+    useEffect(() => {
+        if (searchParams && (searchParams.get('playerName') || searchParams.get('startDate') || searchParams.get('endDate'))) {
+            const formData = new FormData();
+            if (searchParams.get('playerName')) formData.append('playerName', searchParams.get('playerName')!);
+            if (searchParams.get('startDate')) formData.append('startDate', searchParams.get('startDate')!);
+            if (searchParams.get('endDate')) formData.append('endDate', searchParams.get('endDate')!);
+            handleSubmit(formData);
+        }
+    }, [searchParams]);
 
     async function handleSubmit(formData: FormData) {
         setLoading(true);
@@ -17,6 +29,19 @@ export default function MatchesSearch() {
         try {
             const result = await searchMatches(formData);
             setMatches(result || []);
+            
+            // Update URL with search params
+            const params = new URLSearchParams(window.location.search);
+            const playerName = formData.get('playerName');
+            const startDate = formData.get('startDate');
+            const endDate = formData.get('endDate');
+            
+            if (playerName) params.set('playerName', playerName.toString());
+            if (startDate) params.set('startDate', startDate.toString());
+            if (endDate) params.set('endDate', endDate.toString());
+            
+            const newUrl = `${window.location.pathname}?${params.toString()}`;
+            window.history.pushState({}, '', newUrl);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to fetch matches');
         } finally {
@@ -35,6 +60,7 @@ export default function MatchesSearch() {
                         type="text"
                         id="playerName"
                         name="playerName"
+                        defaultValue={searchParams?.get('playerName') || ''}
                         className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
                         required
                     />
@@ -48,6 +74,7 @@ export default function MatchesSearch() {
                             type="date"
                             id="startDate"
                             name="startDate"
+                            defaultValue={searchParams?.get('startDate') || ''}
                             className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
                         />
                     </div>
@@ -59,6 +86,7 @@ export default function MatchesSearch() {
                             type="date"
                             id="endDate"
                             name="endDate"
+                            defaultValue={searchParams?.get('endDate') || ''}
                             className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
                         />
                     </div>
