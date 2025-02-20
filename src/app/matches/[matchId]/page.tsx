@@ -1,46 +1,22 @@
-'use client';
-
-import { useEffect, useState, use } from 'react';
 import { fetchMatchDetail } from '@/lib/pubg';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import { PubgMatchResponse, Participant } from '@/types/pubg';
+import { Participant } from '@/types/pubg';
 
 type Params = Promise<{ matchId: string }>
 
-export default function MatchDetail(props: { params: Params }) {
+export default async function MatchDetail(props: { params: Params }) {
 
-    const params = use(props.params);
+    const params = await props.params;
+    const result = await fetchMatchDetail(params.matchId);
 
-    const [matchData, setMatchData] = useState<PubgMatchResponse | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        const loadMatchDetail = async () => {
-            const result = await fetchMatchDetail(params.matchId);
-            setLoading(false);
-            if (result.error) {
-                setError(result.error);
-            } else {
-                setMatchData(result.data);
-            }
-        };
-
-        loadMatchDetail();
-    }, [params.matchId]);
-
-    if (loading) {
-        return <LoadingSpinner />;
+    if (result.error) {
+        return <div className="text-red-500 p-4">{result.error}</div>;
     }
 
-    if (error) {
-        return <div className="text-red-500 p-4">{error}</div>;
-    }
-
-    if (!matchData) {
+    if (!result.data) {
         return <div className="p-4">No match data found</div>;
     }
 
+    const matchData = result.data;
     const participants = matchData.included
         .filter((item): item is Participant => item.type === 'participant')
         .sort((a, b) => a.attributes.stats.winPlace - b.attributes.stats.winPlace);

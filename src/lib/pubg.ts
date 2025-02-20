@@ -17,8 +17,9 @@ export async function fetchFilteredMatches(playerName: string, startDate: Date, 
             };
         }
 
-        const startDateStr = startDate.toISOString();
-        const endDateStr = endDate.toISOString();
+        // Ensure dates are in UTC
+        const startDateStr = new Date(startDate).toISOString();
+        const endDateStr = new Date(endDate).toISOString();
         
         const response = await fetch(
             `${process.env.DISCORD_BOT_API_URL}/api/v1/pubg/matches/filter/playerName/${encodeURIComponent(playerName)}/startDate/${encodeURIComponent(startDateStr)}/endDate/${encodeURIComponent(endDateStr)}`,
