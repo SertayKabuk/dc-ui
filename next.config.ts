@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: 'standalone',
   images: {
-    domains: ['cdn.discordapp.com']
+    remotePatterns: [new URL('https://cdn.discordapp.com')]
   }
 };
 

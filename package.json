@@ -7,7 +7,7 @@
     "prebuild": "next telemetry disable",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.0",
@@ -15,18 +15,17 @@
     "@prisma/client": "^6.6.0",
     "@tailwindcss/postcss": "^4.1.4",
     "lucide-react": "^0.503.0",
-    "next": "15.3.1",
-    "next-auth": "^5.0.0-beta.25",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "next": "16.0.7",
+    "next-auth": "^5.0.0-beta.30",
+    "react": "19.2.1",
+    "react-dom": "19.2.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@types/node": "^22",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
     "eslint": "^9",
-    "eslint-config-next": "15.3.1",
+    "eslint-config-next": "16.0.7",
     "postcss": "^8.5.3",
     "prisma": "^6.6.0",
     "tailwindcss": "^4.1.4",
@@ -34,5 +33,9 @@
   },
   "prisma": {
     "schema": "src/db/schema-postgres.prisma"
+  },
+  "overrides": {
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3"
   }
 }
