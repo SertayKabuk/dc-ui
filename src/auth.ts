@@ -9,15 +9,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Discord({
     clientId: process.env.DISCORD_CLIENT_ID,
     clientSecret: process.env.DISCORD_CLIENT_SECRET,
-    // profile(profile) {
-    //   return {
-    //     id: profile.id,
-    //     name: profile.username,
-    //     email: profile.email,
-    //     image: profile.image_url ?? profile.avatar ?? null,
-    //     role: profile.role ?? "none",
-    //   }
-    // },
   })],
   callbacks: {
     async session({ session, user }) {
