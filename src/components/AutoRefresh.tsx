@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import { useAutoRefresh } from '@/hooks/useAutoRefresh';
 
@@ -10,16 +10,6 @@ interface TimeDisplayProps {
 
 // Client-side only time display component
 function TimeDisplay({ date }: TimeDisplayProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return <span>Loading...</span>;
-  }
-
   return <span>{date.toLocaleTimeString()}</span>;
 }
 

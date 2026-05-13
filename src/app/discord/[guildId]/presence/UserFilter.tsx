@@ -1,7 +1,7 @@
 "use client";
 
 import { PresenceLog } from "@/types/discord";
-import { useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 export function UserFilterForm({ 
@@ -12,22 +12,15 @@ export function UserFilterForm({
   initialData: PresenceLog[] 
 }) {
   const [username, setUsername] = useState(initialUsername);
-  const [filteredLogs, setFilteredLogs] = useState(initialData);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
   
-  // Filter logs when username changes
-  useEffect(() => {
-    if (username) {
-      setFilteredLogs(
-        initialData.filter(log => 
-          log.username.toLowerCase().includes(username.toLowerCase())
-        )
-      );
-    } else {
-      setFilteredLogs(initialData);
-    }
+  const filteredLogs = useMemo(() => {
+    if (!username) return initialData;
+    return initialData.filter(log =>
+      log.username.toLowerCase().includes(username.toLowerCase())
+    );
   }, [username, initialData]);
 
   // Handle date filter form submission (server-side filtering)
@@ -50,6 +43,14 @@ export function UserFilterForm({
     return new Date(dateStr).toLocaleString();
   };
 
+  const defaultStartDate = searchParams.get('startDate') || (() => {
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+    return date.toISOString().slice(0, 16);
+  })();
+
+  const defaultEndDate = searchParams.get('endDate') || new Date().toISOString().slice(0, 16);
+
   return (
     <>
       <div className="mb-6">
@@ -61,7 +62,7 @@ export function UserFilterForm({
               id="startDate"
               name="startDate"
               required
-              defaultValue={searchParams.get('startDate') || new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
+              defaultValue={defaultStartDate}
               className="border rounded p-2 text-black bg-white dark:text-white dark:bg-gray-800"
             />
           </div>
@@ -72,7 +73,7 @@ export function UserFilterForm({
               id="endDate"
               name="endDate"
               required
-              defaultValue={searchParams.get('endDate') || new Date().toISOString().slice(0, 16)}
+              defaultValue={defaultEndDate}
               className="border rounded p-2 text-black bg-white dark:text-white dark:bg-gray-800"
             />
           </div>

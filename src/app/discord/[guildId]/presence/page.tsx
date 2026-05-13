@@ -20,9 +20,12 @@ export default async function PresencePage(props: {
   const params = await props.params;
   const searchParams = await props.searchParams;
 
+  const defaultStartDate = new Date();
+  defaultStartDate.setDate(defaultStartDate.getDate() - 1);
+
   const startDate = searchParams.startDate ? 
     new Date(searchParams.startDate) : 
-    new Date(Date.now() - 24 * 60 * 60 * 1000);
+    defaultStartDate;
     
   const endDate = searchParams.endDate ? 
     new Date(searchParams.endDate) : 
